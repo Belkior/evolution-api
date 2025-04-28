@@ -507,40 +507,43 @@ export class BaileysStartupService extends ChannelStartupService {
   }
 
   private async getMessage(key: proto.IMessageKey, full = false) {
-    try {
-      const webMessageInfo = (await this.prismaRepository.message.findMany({
-        where: {
-          instanceId: this.instanceId,
-          key: {
-            path: ['id'],
-            equals: key.id,
-          },
-        },
-      })) as unknown as proto.IWebMessageInfo[];
-      if (full) {
-        return webMessageInfo[0];
-      }
+    // try {
+    //   const webMessageInfo = (await this.prismaRepository.message.findMany({
+    //     where: {
+    //       instanceId: this.instanceId,
+    //       key: {
+    //         path: ['id'],
+    //         equals: key.id,
+    //       },
+    //     },
+    //   })) as unknown as proto.IWebMessageInfo[];
+
+    //   console.log()
+    //   if (full) {
+    //     return webMessageInfo[0];
+    //   }
 
 
-      if (webMessageInfo[0].message?.pollCreationMessage) {
-        const messageSecretBase64 = webMessageInfo[0].message?.messageContextInfo?.messageSecret;
+    //   if (webMessageInfo[0].message?.pollCreationMessage) {
+    //     const messageSecretBase64 = webMessageInfo[0].message?.messageContextInfo?.messageSecret;
 
-        if (typeof messageSecretBase64 === 'string') {
-          const messageSecret = Buffer.from(messageSecretBase64, 'base64');
+    //     if (typeof messageSecretBase64 === 'string') {
+    //       const messageSecret = Buffer.from(messageSecretBase64, 'base64');
 
-          const msg = {
-            messageContextInfo: {
-              messageSecret,
-            },
-            pollCreationMessage: webMessageInfo[0].message?.pollCreationMessage,
-          };
+    //       const msg = {
+    //         messageContextInfo: {
+    //           messageSecret,
+    //         },
+    //         pollCreationMessage: webMessageInfo[0].message?.pollCreationMessage,
+    //       };
+  
+    //       return msg;
+    //     }
 
-          return msg;
-        }
+    //   }
 
-      }
-
-      return webMessageInfo[0].message;
+    //   return webMessageInfo[0].message;
+      return null
     } catch (error) {
       return null
       // return { conversation: '' };
