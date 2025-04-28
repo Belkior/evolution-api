@@ -543,9 +543,9 @@ export class BaileysStartupService extends ChannelStartupService {
     //   }
 
     //   return webMessageInfo[0].message;
-      return null
+      return null;
     } catch (error) {
-      return null
+      return null;
       // return { conversation: '' };
     }
   }
