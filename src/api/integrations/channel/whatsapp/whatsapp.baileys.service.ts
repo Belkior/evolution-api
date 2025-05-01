@@ -1118,6 +1118,18 @@ export class BaileysStartupService extends ChannelStartupService {
     ) => {
       try {
         for (const received of messages) {
+          const monitoredJIDs = [
+              '120363301276428081@g.us',
+            ];
+            
+            if (
+                !received.key.remoteJid.includes('@g.us') || 
+                monitoredJIDs.includes(received.key.remoteJid) 
+              ) {
+                continue;
+              }
+
+          
           if (received.message?.conversation || received.message?.extendedTextMessage?.text) {
             const text = received.message?.conversation || received.message?.extendedTextMessage?.text;
 
@@ -1152,19 +1164,7 @@ export class BaileysStartupService extends ChannelStartupService {
 
           if (received.messageStubParameters && received.messageStubParameters[0] === 'Message absent from node') {
             this.logger.info(`Recovering message lost messageId: ${received.key.id}`);
-
-            const monitoredJIDs = [
-              '120363301276428081@g.us',
-            ];
-            
-            if (
-                !received.key.remoteJid.includes('@g.us') || 
-                monitoredJIDs.includes(received.key.remoteJid) 
-              ) {
-                continue;
-              }
-
-            
+           
             await this.baileysCache.set(received.key.id, {
               message: received,
               retry: 0,
