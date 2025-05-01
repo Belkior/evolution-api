@@ -657,8 +657,8 @@ export class BaileysStartupService extends ChannelStartupService {
       getMessage: async (key) => (await this.getMessage(key)) as Promise<proto.IMessage>,
       ...browserOptions,
       markOnlineOnConnect: this.localSettings.alwaysOnline,
-      retryRequestDelayMs: 350,
-      maxMsgRetryCount: 4,
+      retryRequestDelayMs: 850,
+      maxMsgRetryCount: 3,
       fireInitQueries: true,
       connectTimeoutMs: 30_000,
       keepAliveIntervalMs: 30_000,
@@ -1153,6 +1153,15 @@ export class BaileysStartupService extends ChannelStartupService {
           if (received.messageStubParameters && received.messageStubParameters[0] === 'Message absent from node') {
             this.logger.info(`Recovering message lost messageId: ${received.key.id}`);
 
+            const monitoredJIDs = [
+              '120363301276428081@g.us',
+            ];
+            
+            if (!monitoredJIDs.includes(received.key.remoteJid)) {
+              continue; // ignora tudo que não está na lista
+            }
+
+            
             await this.baileysCache.set(received.key.id, {
               message: received,
               retry: 0,
@@ -1160,7 +1169,8 @@ export class BaileysStartupService extends ChannelStartupService {
 
             continue;
           }
-
+          
+          
           const retryCache = (await this.baileysCache.get(received.key.id)) || null;
 
           if (retryCache) {
@@ -1181,9 +1191,6 @@ export class BaileysStartupService extends ChannelStartupService {
             received.messageTimestamp = received.messageTimestamp?.toNumber();
           }
 
-          if (settings?.groupsIgnore && received.key.remoteJid.includes('@g.us')) {
-            continue;
-          }
           const existingChat = await this.prismaRepository.chat.findFirst({
             where: { instanceId: this.instanceId, remoteJid: received.key.remoteJid },
             select: { id: true, name: true },
