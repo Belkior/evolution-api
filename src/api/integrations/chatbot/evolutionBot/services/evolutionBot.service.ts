@@ -314,9 +314,9 @@ export class EvolutionBotService {
 
     const message = await this.sendMessageToBot(instance, session, bot, remoteJid, pushName, content);
 
-    if (!message) return;
+    // if (!message) return;
 
-    await this.sendMessageWhatsApp(instance, remoteJid, session, settings, message);
+    // await this.sendMessageWhatsApp(instance, remoteJid, session, settings, message);
 
     return;
   }
