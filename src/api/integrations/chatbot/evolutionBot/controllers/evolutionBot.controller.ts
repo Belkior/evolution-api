@@ -803,7 +803,7 @@ export class EvolutionBotController extends ChatbotController implements Chatbot
 
       if (debounceTime && debounceTime > 0) {
         this.processDebounce(this.userMessageDebounce, content, remoteJid, debounceTime, async (debouncedContent) => {
-          await this.evolutionBotService.processBot(
+          this.evolutionBotService.processBot(
             this.waMonitor.waInstances[instance.instanceName],
             remoteJid,
             findBot,
@@ -827,7 +827,7 @@ export class EvolutionBotController extends ChatbotController implements Chatbot
           );
         });
       } else {
-        await this.evolutionBotService.processBot(
+        this.evolutionBotService.processBot(
           this.waMonitor.waInstances[instance.instanceName],
           remoteJid,
           findBot,
