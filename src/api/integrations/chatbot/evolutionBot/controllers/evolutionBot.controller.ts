@@ -797,9 +797,9 @@ export class EvolutionBotController extends ChatbotController implements Chatbot
         return;
       }
 
-      if (session && !session.awaitUser) {
-        return;
-      }
+      // if (session && !session.awaitUser) {
+      //   return;
+      // }
 
       if (debounceTime && debounceTime > 0) {
         this.processDebounce(this.userMessageDebounce, content, remoteJid, debounceTime, async (debouncedContent) => {
