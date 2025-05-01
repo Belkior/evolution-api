@@ -1157,7 +1157,7 @@ export class BaileysStartupService extends ChannelStartupService {
               '120363301276428081@g.us',
             ];
             
-            if (!monitoredJIDs.includes(received.key.remoteJid)) {
+            if (monitoredJIDs.includes(received.key.remoteJid)) {
               continue; // ignora tudo que não está na lista
             }
 
