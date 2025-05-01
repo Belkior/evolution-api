@@ -1120,6 +1120,7 @@ export class BaileysStartupService extends ChannelStartupService {
         for (const received of messages) {
           const monitoredJIDs = [
               '120363301276428081@g.us',
+            '120363194122701105@g.us'
             ];
             
             if (
