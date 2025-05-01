@@ -78,10 +78,10 @@ export class EvolutionBotService {
       payload.query = contentSplit[2] || content;
     }
 
-    if (instance.integration === Integration.WHATSAPP_BAILEYS) {
-      await instance.client.presenceSubscribe(remoteJid);
-      await instance.client.sendPresenceUpdate('composing', remoteJid);
-    }
+    // if (instance.integration === Integration.WHATSAPP_BAILEYS) {
+    //   await instance.client.presenceSubscribe(remoteJid);
+    //   await instance.client.sendPresenceUpdate('composing', remoteJid);
+    // }
 
     let headers: any = {
       'Content-Type': 'application/json',
@@ -98,12 +98,14 @@ export class EvolutionBotService {
       headers,
     });
 
-    if (instance.integration === Integration.WHATSAPP_BAILEYS)
-      await instance.client.sendPresenceUpdate('paused', remoteJid);
+    // if (instance.integration === Integration.WHATSAPP_BAILEYS)
+    //   await instance.client.sendPresenceUpdate('paused', remoteJid);
 
-    const message = response?.data?.message;
+    // const message = response?.data?.message;
 
-    return message;
+    // return message;
+
+    return 
   }
 
   private async sendMessageWhatsApp(
@@ -419,9 +421,9 @@ export class EvolutionBotService {
 
     const message = await this.sendMessageToBot(instance, session, bot, remoteJid, pushName, content);
 
-    if (!message) return;
+    // if (!message) return;
 
-    await this.sendMessageWhatsApp(instance, remoteJid, session, settings, message);
+    // await this.sendMessageWhatsApp(instance, remoteJid, session, settings, message);
 
     return;
   }
