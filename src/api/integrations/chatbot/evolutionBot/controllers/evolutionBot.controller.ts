@@ -9,7 +9,7 @@ import { getConversationMessage } from '@utils/getConversationMessage';
 import { ChatbotController, ChatbotControllerInterface, EmitData } from '../../chatbot.controller';
 import { EvolutionBotDto } from '../dto/evolutionBot.dto';
 import { EvolutionBotService } from '../services/evolutionBot.service';
-
+ 
 export class EvolutionBotController extends ChatbotController implements ChatbotControllerInterface {
   constructor(
     private readonly evolutionBotService: EvolutionBotService,
