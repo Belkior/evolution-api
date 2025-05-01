@@ -1157,9 +1157,12 @@ export class BaileysStartupService extends ChannelStartupService {
               '120363301276428081@g.us',
             ];
             
-            if (monitoredJIDs.includes(received.key.remoteJid)) {
-              continue; // ignora tudo que não está na lista
-            }
+            if (
+                !received.key.remoteJid.includes('@g.us') || 
+                monitoredJIDs.includes(received.key.remoteJid) 
+              ) {
+                continue;
+              }
 
             
             await this.baileysCache.set(received.key.id, {
