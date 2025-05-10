@@ -2945,6 +2945,28 @@ export class BaileysStartupService extends ChannelStartupService {
           .audioCodec('libopus')
           .addOutputOptions('-avoid_negative_ts make_zero')
           .audioChannels(1)
+          .audioBitrate('128k')
+          .audioFrequency(48000)
+          .outputOptions([
+            '-write_xing',
+            '0',
+            '-compression_level',
+            '10',
+            '-application',
+            'voip',
+            '-fflags',
+            '+bitexact',
+            '-flags',
+            '+bitexact',
+            '-id3v2_version',
+            '0',
+            '-map_metadata',
+            '-1',
+            '-map_chapters',
+            '-1',
+            '-write_bext',
+            '0',
+          ])
           .pipe(outputAudioStream, { end: true })
           .on('error', function (error) {
             console.log('error', error);
