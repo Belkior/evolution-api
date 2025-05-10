@@ -657,7 +657,7 @@ export class BaileysStartupService extends ChannelStartupService {
       getMessage: async (key) => (await this.getMessage(key)) as Promise<proto.IMessage>,
       ...browserOptions,
       markOnlineOnConnect: this.localSettings.alwaysOnline,
-      retryRequestDelayMs: 850,
+      retryRequestDelayMs: 1850,
       maxMsgRetryCount: 3,
       fireInitQueries: true,
       connectTimeoutMs: 30_000,
