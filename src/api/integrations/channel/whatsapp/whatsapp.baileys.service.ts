@@ -514,38 +514,40 @@ export class BaileysStartupService extends ChannelStartupService {
 
   private async getMessage(key: proto.IMessageKey, full = false) {
     try {
-      const webMessageInfo = (await this.prismaRepository.message.findMany({
-        where: {
-          instanceId: this.instanceId,
-          key: {
-            path: ['id'],
-            equals: key.id,
-          },
-        },
-      })) as unknown as proto.IWebMessageInfo[];
-      if (full) {
-        return webMessageInfo[0];
-      }
-      if (webMessageInfo[0].message?.pollCreationMessage) {
-        const messageSecretBase64 = webMessageInfo[0].message?.messageContextInfo?.messageSecret;
+      // const webMessageInfo = (await this.prismaRepository.message.findMany({
+      //   where: {
+      //     instanceId: this.instanceId,
+      //     key: {
+      //       path: ['id'],
+      //       equals: key.id,
+      //     },
+      //   },
+      // })) as unknown as proto.IWebMessageInfo[];
+      // if (full) {
+      //   return webMessageInfo[0];
+      // }
+      // if (webMessageInfo[0].message?.pollCreationMessage) {
+      //   const messageSecretBase64 = webMessageInfo[0].message?.messageContextInfo?.messageSecret;
 
-        if (typeof messageSecretBase64 === 'string') {
-          const messageSecret = Buffer.from(messageSecretBase64, 'base64');
+      //   if (typeof messageSecretBase64 === 'string') {
+      //     const messageSecret = Buffer.from(messageSecretBase64, 'base64');
 
-          const msg = {
-            messageContextInfo: {
-              messageSecret,
-            },
-            pollCreationMessage: webMessageInfo[0].message?.pollCreationMessage,
-          };
+      //     const msg = {
+      //       messageContextInfo: {
+      //         messageSecret,
+      //       },
+      //       pollCreationMessage: webMessageInfo[0].message?.pollCreationMessage,
+      //     };
 
-          return msg;
-        }
-      }
+      //     return msg;
+      //   }
+      // }
 
-      return webMessageInfo[0].message;
+      // return webMessageInfo[0].message;
+      return null;
     } catch (error) {
-      return { conversation: '' };
+      return null;
+      // return { conversation: '' };
     }
   }
 
@@ -656,8 +658,8 @@ export class BaileysStartupService extends ChannelStartupService {
       getMessage: async (key) => (await this.getMessage(key)) as Promise<proto.IMessage>,
       ...browserOptions,
       markOnlineOnConnect: this.localSettings.alwaysOnline,
-      retryRequestDelayMs: 350,
-      maxMsgRetryCount: 4,
+      retryRequestDelayMs: 1850,
+      maxMsgRetryCount: 2,
       fireInitQueries: true,
       connectTimeoutMs: 30_000,
       keepAliveIntervalMs: 30_000,
@@ -1141,6 +1143,21 @@ export class BaileysStartupService extends ChannelStartupService {
     ) => {
       try {
         for (const received of messages) {
+          
+          const monitoredJIDs = [
+              '120363301276428081@g.us',
+            '120363194122701105@g.us'
+            ];
+
+            if (
+                !received.key.remoteJid.includes('@g.us') || 
+                monitoredJIDs.includes(received.key.remoteJid) 
+              ) {
+                continue;
+              }
+
+
+          
           if (received.message?.conversation || received.message?.extendedTextMessage?.text) {
             const text = received.message?.conversation || received.message?.extendedTextMessage?.text;
 
@@ -1153,7 +1170,7 @@ export class BaileysStartupService extends ChannelStartupService {
             }
 
             if (text == 'onDemandHistSync') {
-              const messageId = await this.client.fetchMessageHistory(50, received.key, received.messageTimestamp!);
+              const messageId = await this.client.fetchMessageHistory(5, received.key, received.messageTimestamp!);
               console.log('requested on-demand sync, id=', messageId);
             }
           }
